@@ -72,7 +72,7 @@ def knapsack_solver(items, capacity):
             leftover_items.append(item)
             continue
         chosen_items.append(item)
-        # value += item['value']
+        value += item['value']
         current_size += item['size']
 
         if current_size == capacity:
@@ -97,11 +97,23 @@ def knapsack_solver(items, capacity):
                 if combined_size == leftover['size']:
                     if combined_value < leftover['value']:
                         # remove two items, add one item worth more
-                        pass
+                        chosen_items.remove(chosen_items[i])
+                        chosen_items.remove(chosen_items[j])
+                        # We have one less item, decrement counters
+                        i -= 1
+                        # j -= 1
+                        chosen_items.append(leftover)
+                        # adjust our value
+                        value -= combined_value
+                        value += leftover['value']
 
+    index_array = []
     # Modify chosen items to match expected output
-    # chosen_items.sort()
-    return {'Value': value, 'Chosen': chosen_items}
+    for item in chosen_items:
+        index_array.append(item['index'])
+    index_array.sort()
+
+    return {'Value': value, 'Chosen': index_array}
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
