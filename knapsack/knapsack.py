@@ -65,14 +65,14 @@ def knapsack_solver(items, capacity):
     # {'Value': 197, 'Chosen': [1, 7, 8]}
     current_size = 0
     chosen_items = []
-    value = 0
+    # value = 0
 
     for item in ratio_list:
         if (current_size + item['size']) > capacity:
             leftover_items.append(item)
             continue
-        chosen_items.append(item['index'])
-        value += item['value']
+        chosen_items.append(item)
+        # value += item['value']
         current_size += item['size']
 
         if current_size == capacity:
@@ -82,9 +82,24 @@ def knapsack_solver(items, capacity):
     # is not in solution
     #   remove items from knapsack until max_item fits
 
+    # For each leftover item
     for leftover in leftover_items:
-        print(leftover['index'])
-    chosen_items.sort()
+        # print(leftover['index'])
+        # loop through selected_items backwards to find two with equal size
+        for i in range(len(chosen_items) - 1, -1, -1):
+            # check this item against previous items for a match
+            for j in range(i - 1, -1, -1):
+                # print(chosen_items[i]['index'], chosen_items[j]['index'])
+                combined_size = chosen_items[i]['size'] + chosen_items[j]['size']
+                combined_value = chosen_items[i]['value'] + chosen_items[j]['value']
+                # print(combined_size, leftover['size'])
+                # if combined size is equiv to leftover size, combare value
+                if combined_size == leftover['size']:
+                    if combined_value < leftover['value']:
+                        # remove two items, add one item worth more
+                        pass
+
+    # chosen_items.sort()
     return {'Value': value, 'Chosen': chosen_items}
 
 if __name__ == '__main__':
