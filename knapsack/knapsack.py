@@ -65,7 +65,7 @@ def knapsack_solver(items, capacity):
     # {'Value': 197, 'Chosen': [1, 7, 8]}
     current_size = 0
     chosen_items = []
-    # value = 0
+    value = 0
 
     for item in ratio_list:
         if (current_size + item['size']) > capacity:
@@ -89,16 +89,17 @@ def knapsack_solver(items, capacity):
         for i in range(len(chosen_items) - 1, -1, -1):
             # check this item against previous items for a match
             for j in range(i - 1, -1, -1):
-                # print(chosen_items[i]['index'], chosen_items[j]['index'])
-                combined_size = chosen_items[i]['size'] + chosen_items[j]['size']
-                combined_value = chosen_items[i]['value'] + chosen_items[j]['value']
-                # print(combined_size, leftover['size'])
-                # if combined size is equiv to leftover size, combare value
+                combined_size = chosen_items[i]['size'] \
+                    + chosen_items[j]['size']
+                combined_value = chosen_items[i]['value'] \
+                    + chosen_items[j]['value']
+                # if combined size is equiv to leftover size, compare value
                 if combined_size == leftover['size']:
                     if combined_value < leftover['value']:
                         # remove two items, add one item worth more
                         pass
 
+    # Modify chosen items to match expected output
     # chosen_items.sort()
     return {'Value': value, 'Chosen': chosen_items}
 
