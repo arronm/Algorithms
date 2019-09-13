@@ -3,35 +3,15 @@
 import sys
 from collections import namedtuple
 
-# For very very large lists, can implement binary search to find expected location
+# Additional Questions
+# 1) Are there item(s) whose value is greater than the total value
+# 2) Are there two items whose combined value is
+#    less than another item of equal weight?
+# 3) Assuming a normalized list sorted by some ideal output,
+#    can I reduce my list enough to validate the solution accuracy?
+# 4) Given two items with the same ratio, will the optimal solution
+#    include both items, what cases will I want val > cost & vice versa
 
-# def find_location(arr, target, idx=0):
-#     if len(arr) == 0:
-#         return -1  # empty array
-
-#     if len(arr) == 1:
-#         # if arr[0] is not target:
-#         #   return -1
-#         if arr[0]['ratio'] > target:
-#             if idx - 1 < 0:
-#                 return 0
-#             return idx - 1
-#         return idx
-
-#     mid = len(arr) // 2
-
-#     if arr[mid]['ratio'] >= target:
-#         return idx + mid
-
-#     next_arr = arr[:mid] if arr[mid]['ratio'] > target else arr[mid:]
-
-#     if arr[mid]['ratio'] > target:
-#         next_arr = arr[:mid]
-#     else:
-#         next_arr = arr[mid:]
-#         idx = mid + idx
-
-#     return find_location(next_arr, target, idx)
 
 Item = namedtuple('Item', ['index', 'size', 'value'])
 
@@ -45,9 +25,14 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 
 def knapsack_solver(items, capacity):
     ratio_list = []
+    max_item = {'index': 0, 'value': 0}
     for item in items:
         index, size, value = [*item]
         ratio = item.value / item.size
+
+        if item.value > max_item:
+            max_item['value'] = item.value
+            max_item['index'] = item.index
 
         new_item = {
             'index': index,
@@ -80,9 +65,12 @@ def knapsack_solver(items, capacity):
         value += item['value']
         current_size += item['size']
 
+    # if max_item['value'] > value and max_item['index']
+    # is not in solution
+    #   remove items from knapsack until max_item fits
+
     chosen_items.sort()
     return {'Value': value, 'Chosen': chosen_items}
-
 
 if __name__ == '__main__':
   if len(sys.argv) > 1:
