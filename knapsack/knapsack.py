@@ -26,13 +26,22 @@ Item = namedtuple('Item', ['index', 'size', 'value'])
 def knapsack_solver(items, capacity):
     ratio_list = []
     max_item = {'index': 0, 'value': 0}
+    total_size = 0
+    total_value = 0
+    leftover_items = []
     for item in items:
-        index, size, value = [*item]
-        ratio = item.value / item.size
+        total_size += item.size
+        total_value += item.value
 
-        if item.value > max_item:
+        if item.value > max_item['value']:
             max_item['value'] = item.value
             max_item['index'] = item.index
+
+    for item in items:
+        index, size, value = [*item]
+        ratio = (item.value / item.size) \
+            + (item.value / total_value) \
+            - (item.size / total_size)
 
         new_item = {
             'index': index,
@@ -60,15 +69,21 @@ def knapsack_solver(items, capacity):
 
     for item in ratio_list:
         if (current_size + item['size']) > capacity:
+            leftover_items.append(item)
             continue
         chosen_items.append(item['index'])
         value += item['value']
         current_size += item['size']
 
+        if current_size == capacity:
+            break
+
     # if max_item['value'] > value and max_item['index']
     # is not in solution
     #   remove items from knapsack until max_item fits
 
+    for leftover in leftover_items:
+        print(leftover['index'])
     chosen_items.sort()
     return {'Value': value, 'Chosen': chosen_items}
 
